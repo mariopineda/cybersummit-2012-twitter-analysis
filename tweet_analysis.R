@@ -161,7 +161,7 @@ fn <- paste(path.figures,"time_series.png", sep='')
 png(fn, width=480*2, height=480*2, pointsize=16)
   plot(f.vec, type='s', col='blue', lwd=3, bty='n', xaxt='n', ylab='Number of tweets', 
               xlab="Time", ylim=c(0,70), 
-              main="Time series of tweets during the Cyber Summit 2012")
+              main="Time series of tweets during the Cyber Summit 2012", cex=3)
   axis(1, at=seq(1,73,3), labels=c(seq(0,21,3), seq(0,21,3), seq(0,23,3), 0))
   axis(3, at=c(1,25,49,73), labels=FALSE)
   mtext("Oct 1", side=3, at=12)
@@ -180,8 +180,8 @@ png(fn, width=480*2, height=480*2, pointsize=16)
   # Add summit events to time series
   color <- rgb(0,0,1,.4)
   time.slot(day=1, start.time=19, end.time=20.5, name="Opening Plenary", color=color)
-  time.slot(day=2, start.time=9, end.time=10.25, name="Keynote Presentation (Andrew Hessel)", color=color)
-  time.slot(day=2, start.time=13.5, end.time=14.75, name="Opening Plenary (Hilary Mason)", color=color)
+  time.slot(day=2, start.time=9, end.time=10.25, name="Keynote: Andrew Hessel", color=color)
+  time.slot(day=2, start.time=13.5, end.time=14.75, name="Keynote: Hilary Mason", color=color)
   time.slot(day=2, start.time=16.5, end.time=17.5, name="PechaKucha", color=color)
   time.slot(day=2, start.time=19, end.time=22, name="Jay and John Talk Show", color=color) 
   time.slot(day=3, start.time=13.5, end.time=14.75, name="Closing Plenary", color=color)
@@ -215,6 +215,7 @@ hashtags <- hashtags[!m]
 hashtags[names(hashtags) == "#cybersummit"] <- hashtags[names(hashtags) == "#cybersummit"] + hashtags[7]
 hashtags[1] <- hashtags[1] + 7
 # hashtags <- hashtags[1:6, 8:length(hashtags)] # ERROR!
+hashtags <- c(hashtags[1:3], hashtags[5:22]) # Remove the #cybersummit" hash tag (it's a typo)
 
 # Generate bar plot of 20 hash tags 
 fn <- paste(path.figures,"hashtags1.png", sep='')
@@ -225,12 +226,12 @@ png(fn, width=480*2, height=480*2, pointsize=12*2)
 dev.off()
 cat('Generated figure:', fn,'\n')
 
-# Generate another bar plot of the top 20 hashtags but without the #cybersummit hashtag
+# Generate another bar plot of the top 10 hashtags but without the #cybersummit hashtag
 fn <- paste(path.figures,"hashtags2.png", sep='')
 png(fn, width=480*2, height=480*2, pointsize=12*2)
   par(mar=c(10, 4, 2, 0.5))
-  barplot(hashtags[2:21], las=2, ylab="Frequency", ylim=c(0, 50), col='blue', border=NA, 
-                          main="Top 20 hashtags used during the Cyber Summit 2012")
+  barplot(hashtags[2:11], las=2, ylab="Frequency", ylim=c(0, 70), col='blue', border=NA, 
+                          main="Top 10 hashtags used during the Cyber Summit 2012")
 dev.off()
 cat('Generated figure:', fn,'\n')
 
