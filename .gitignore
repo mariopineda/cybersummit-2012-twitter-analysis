@@ -1,0 +1,9 @@
+.Rhistory
+.Rbuildignore
+*.png
+*.rda
+*.Rproj.user
+*.Rproj
+*.jpg
+*.pdf
+.Rproj.user

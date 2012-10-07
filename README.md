@@ -1,6 +1,15 @@
 Analysis of tweets from the Cyber Summit 2012
 ------------
-This projects analyzes the twitter posts from the Cyber Summmit 2012. 
+This repository contains the scripts and functions being used to analyze twitter data from
+the [Cyber Summit 2012](http://www.cybera.ca/summit2012) in Banff. Briefly, the script 
+searches twitter for the hashtag #cybersummit, downloads posts containing this hashtag and 
+then generates the following plots of the data:
+- Barplot of top n twitteratis, where n=20 by default
+- Time series of the number of tweets per hour
+- Bar chart of most commonly used hash tags
+- Word clouds of tweets
+
+These figures are used in the following blog posts **pending**.
 
 MPK Analytics, Inc. (www.mpkanalytics.com)
 Suite #300, 8507-112 Street, Edmonton, AB T6G 2L7, Canada
