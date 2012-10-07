@@ -15,7 +15,7 @@ MPK Analytics, Inc. (www.mpkanalytics.com)
 Suite #300, 8507-112 Street, Edmonton, AB T6G 2L7, Canada
 Email: info@mpkanalytics.com
 
-LICENSE
+License
 ------------
 Copyright MPK Analytics, Inc.
 

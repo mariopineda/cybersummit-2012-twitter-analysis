@@ -3,18 +3,16 @@
 #
 # Copyright 2012 MPK Analytics, Inc.
 #
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
+# This program is free software: you can redistribute it and/or modify it under the terms 
+# of the GNU General Public License as published by the Free Software Foundation, either 
+# version 3 of the License, or (at your option) any later version.
 
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY 
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A 
+# PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along with this 
+# program. If not, see <http://www.gnu.org/licenses/>.
 
 # MPK Analytics, Inc. (www.mpkanalytics.com)
 # Suite #300, 8507-112 Street, Edmonton, AB T6G 2L7, Canada
@@ -25,7 +23,7 @@ require(XML)       # Tools for parsing and generating XML
 require(wordcloud) # Wordcloud tools
 require(tm)        # Text mining tools
 
-#The scraping code below searches and downloads twitter posts with the hash tag 
+# The scraping code below searches and downloads twitter posts with the hash tag 
 # #cybersummit. It appears that one can only retrieve tweets going back about one week 
 # using the twitter search functionality. The file 'tweets.Rdata' contains a data frame 
 # with tweets that were scraped from twitter following the Cyber Summit 2012. Running the 
@@ -34,6 +32,9 @@ require(tm)        # Text mining tools
 
 # Name of Rdata file with the Cyber Summit tweet data
 file.name <- "./tweets.Rdata"
+
+# Folder where figures should be saved
+path.figures <- './figures/'
 
 # Start of tweet scraping code
 if (!file.exists(file.name)) {
@@ -99,7 +100,7 @@ if (!file.exists(file.name)) {
 # Subset the tweet data to only include tweets posted during the conference days 
 tweets <- tweets[tweets$local.time >= as.POSIXlt("2012-10-01 00:00:00") & 
                  tweets$local.time <= as.POSIXlt("2012-10-03 23:59:59"),]
-cat('A total of ', dim(tweets)[1],' tweets were posted during the Cybersummit 2012')
+cat('A total of', dim(tweets)[1],'tweets were posted during the Cybersummit 2012\n')
 
 ##
 # Barplot of top twitteratis 
@@ -118,11 +119,13 @@ for (i in seq(length(twitter.names)))
 names(top.twiteratis) <- twitter.alias
  
 # Generate barplot of top n twitteratias 
-png("twiteratis.png", width=480*2, height=480*2, pointsize=12*2)
+fn <- paste(path.figures,"twitteratis.png", sep='')
+png(fn, width=480*2, height=480*2, pointsize=12*2)
   par(mar=c(7, 4, 2, 0.5))
   barplot(top.twiteratis, las=2, ylab="Number of tweets", ylim=c(0, 140), col='blue', 
-          border=NA, main=paste('Top',n,'twitteratis at the Cybersummit 2012'))
+          border=NA, main=paste('Top',n,'twitteratis at the Cyber Summit 2012'))
 dev.off()
+cat('Generated figure:', fn,'\n')
 
 ##
 # Time series of the number of tweets per hour
@@ -145,7 +148,7 @@ for (j in seq(3)) {
     slice <- slice[slice$local.time < as.POSIXlt(end.time),]
     n.tweets <- dim(slice)[1]
   
-    cat(start.time, "->", end.time,", n=",n.tweets,"\n", sep='')
+    #cat(start.time, "->", end.time,", n=",n.tweets,"\n", sep='') # Very verbose but useful for debugging
     
     # Assemble hourly results
     d.vec <- c(d.vec, start.time)
@@ -154,8 +157,11 @@ for (j in seq(3)) {
 }
 
 # Generate time series of number of tweets per hour
-png("time_series.png", width=480*2, height=480*2, pointsize=16)
-  plot(f.vec, type='s', col='blue', lwd=3, bty='n', xaxt='n', ylab='Number of tweets', xlab="Time", ylim=c(0,70))
+fn <- paste(path.figures,"time_series.png", sep='')
+png(fn, width=480*2, height=480*2, pointsize=16)
+  plot(f.vec, type='s', col='blue', lwd=3, bty='n', xaxt='n', ylab='Number of tweets', 
+              xlab="Time", ylim=c(0,70), 
+              main="Time series of tweets during the Cyber Summit 2012")
   axis(1, at=seq(1,73,3), labels=c(seq(0,21,3), seq(0,21,3), seq(0,23,3), 0))
   axis(3, at=c(1,25,49,73), labels=FALSE)
   mtext("Oct 1", side=3, at=12)
@@ -180,13 +186,11 @@ png("time_series.png", width=480*2, height=480*2, pointsize=16)
   time.slot(day=2, start.time=19, end.time=22, name="Jay and John Talk Show", color=color) 
   time.slot(day=3, start.time=13.5, end.time=14.75, name="Closing Plenary", color=color)
 dev.off()
+cat('Generated figure:', fn,'\n')
 
 ##
 # Bar chart of top hash tags
 ##
-#hashtags <- table(unlist(str_extract_all(tweets$title, "#\\w+"))) 
-#hashtags <- head(sort(hashtags, decreasing=TRUE), 20)
-#barplot(hashtags)
 
 # Use text mining tools to clean up the tweets, extract and tally the hash tags 
 words.corpus <- Corpus(DataframeSource(data.frame(as.character(tweets$title))))
@@ -210,19 +214,25 @@ hashtags[names(hashtags) == "#cybersummit"] <- hashtags[names(hashtags) == "#cyb
 hashtags <- hashtags[!m]
 hashtags[names(hashtags) == "#cybersummit"] <- hashtags[names(hashtags) == "#cybersummit"] + hashtags[7]
 hashtags[1] <- hashtags[1] + 7
-hashtags <- hashtags[1:6, 8:length(hashtags)]
+# hashtags <- hashtags[1:6, 8:length(hashtags)] # ERROR!
 
 # Generate bar plot of 20 hash tags 
-png("hashtags1.png", width=480*2, height=480*2, pointsize=12*2)
+fn <- paste(path.figures,"hashtags1.png", sep='')
+png(fn, width=480*2, height=480*2, pointsize=12*2)
   par(mar=c(9, 4, 2, 0.5))
-  barplot(head(hashtags,20), las=2, ylab="Frequency", ylim=c(0, 400), col='blue', border=NA)
+  barplot(head(hashtags,20), las=2, ylab="Frequency", ylim=c(0, 600), col='blue', 
+                             border=NA, main="Top 20 hashtags used during the Cyber Summit 2012")
 dev.off()
+cat('Generated figure:', fn,'\n')
 
 # Generate another bar plot of the top 20 hashtags but without the #cybersummit hashtag
-png("hashtags2.png", width=480*2, height=480*2, pointsize=12*2)
+fn <- paste(path.figures,"hashtags2.png", sep='')
+png(fn, width=480*2, height=480*2, pointsize=12*2)
   par(mar=c(10, 4, 2, 0.5))
-  barplot(hashtags[2:21], las=2, ylab="Frequency", ylim=c(0, 50), col='blue', border=NA)
+  barplot(hashtags[2:21], las=2, ylab="Frequency", ylim=c(0, 50), col='blue', border=NA, 
+                          main="Top 20 hashtags used during the Cyber Summit 2012")
 dev.off()
+cat('Generated figure:', fn,'\n')
 
 ##
 # Word clouds of tweets
@@ -242,12 +252,15 @@ words.v <- sort(rowSums(words.m), decreasing=TRUE)
 words.d <- data.frame(word = names(words.v),freq=words.v)
 table(words.d$freq)
 
-# Generate word cloud
-pal2 <- brewer.pal(20,"Spectral")
-pdf("wordcloud.pdf", width=7*2, height=7*2)
+# Generate word cloud. To maximize resolution we generate a pdf of the word cloud.
+color.map <- brewer.pal(11,"Spectral")
+fn <- paste(path.figures,"wordcloud.pdf", sep='')
+pdf(fn, width=7*2, height=7*2)
   wordcloud(words.d$word,words.d$freq, scale=c(10,2),min.freq=5, max.words=Inf, 
-            random.order=FALSE, rot.per=.25, colors=pal2,vfont=c("script","plain"))
+            random.order=FALSE, rot.per=.25, colors=color.map, vfont=c("script","plain"), 
+            main="Tweet word cloud from the Cyber Summit 2012")
 dev.off()
+cat('Generated figure:', fn,'\n')
 
 
 
