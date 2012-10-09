@@ -215,13 +215,14 @@ hashtags <- hashtags[!m]
 hashtags[names(hashtags) == "#cybersummit"] <- hashtags[names(hashtags) == "#cybersummit"] + hashtags[7]
 hashtags[1] <- hashtags[1] + 7
 # hashtags <- hashtags[1:6, 8:length(hashtags)] # ERROR!
-hashtags <- c(hashtags[1:3], hashtags[5:22]) # Remove the #cybersummit" hash tag (it's a typo)
+hashtags <- c(hashtags[1:3], hashtags[5:22]) # Remove the #cybersummit" hash tag (typo)
+# hashtags <- c(hashtags[1:10], hashtags[12:21]) # Remove the #bigdata, hash tag (typo)
 
 # Generate bar plot of 20 hash tags 
 fn <- paste(path.figures,"hashtags1.png", sep='')
 png(fn, width=480*2, height=480*2, pointsize=12*2)
   par(mar=c(9, 4, 2, 0.5))
-  barplot(head(hashtags,20), las=2, ylab="Frequency", ylim=c(0, 600), col='blue', 
+  barplot(head(hashtags,11), las=2, ylab="Frequency", ylim=c(0, 600), col='blue', 
                              border=NA, main="Top 20 hashtags used during the Cyber Summit 2012")
 dev.off()
 cat('Generated figure:', fn,'\n')

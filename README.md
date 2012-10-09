@@ -9,15 +9,15 @@ then generates the following plots of the data:
 - Bar chart of most commonly used hash tags
 - Word clouds of tweets
 
-These figures are used in the following blog posts **pending**.
+These figures are used in the following blog post http://mpkanalytics.com/2012/10/07/cyber-summit-2012-a-bit-of-big-data-and-a-lot-of-small-tweets/.
+
+License
+------------
+Copyright 2012 MPK Analytics, Inc.
 
 MPK Analytics, Inc. (www.mpkanalytics.com)
 Suite #300, 8507-112 Street, Edmonton, AB T6G 2L7, Canada
 Email: info@mpkanalytics.com
-
-License
-------------
-Copyright MPK Analytics, Inc.
 
 This program is free software: you can redistribute it and/or modify it under the terms of 
 the GNU General Public License as published by the Free Software Foundation, either 
